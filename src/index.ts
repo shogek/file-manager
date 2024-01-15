@@ -26,12 +26,6 @@ const createWindow = (): void => {
     const webContents = event.sender;
     const win = BrowserWindow.fromWebContents(webContents);
     win.setTitle(title);
-
-    // Get all file names from the "Downloads" folder
-    const directory = await fs.readdir(
-      `${process.env["USERPROFILE"]}/Downloads`
-    );
-    console.log(directory);
   });
 
   // and load the index.html of the app.
@@ -41,10 +35,21 @@ const createWindow = (): void => {
   mainWindow.webContents.openDevTools();
 };
 
+async function getFileNames(path: string): Promise<string[]> {
+  const fileNames = await fs.readdir(path);
+  return fileNames;
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", async () => {
+  ipcMain.handle("get-file-names", async () => {
+    return getFileNames(`${process.env["USERPROFILE"]}/Downloads`);
+  });
+
+  createWindow();
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

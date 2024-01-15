@@ -4,4 +4,5 @@ const { contextBridge, ipcRenderer } = require("electron/renderer");
 
 contextBridge.exposeInMainWorld("electronAPI", {
   setTitle: (title: string) => ipcRenderer.send("set-title", title),
+  getFileNames: () => ipcRenderer.invoke("get-file-names"),
 });
