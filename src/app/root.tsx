@@ -1,3 +1,14 @@
 export function Root() {
-  return <h1>Hello from Root</h1>;
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => {
+          (window as any).electronAPI.setTitle("TEST");
+        }}
+      >
+        Click me to change window's title
+      </button>
+    </div>
+  );
 }
