@@ -26,13 +26,10 @@
  * ```
  */
 
-import { createRoot } from "react-dom/client";
-import { Root } from "./app/root";
 import "./index.css";
 
-console.log(
-  '👋 This message is being logged by "renderer.js", included via webpack'
-);
-
-const root = createRoot(document.body);
-root.render(Root());
+/**
+ * React added via the following tutorial:
+ * https://www.electronforge.io/guides/framework-integration/react-with-typescript
+ */
+import "./app";
