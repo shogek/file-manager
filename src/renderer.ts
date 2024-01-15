@@ -26,6 +26,13 @@
  * ```
  */
 
-import './index.css';
+import { createRoot } from "react-dom/client";
+import { Root } from "./app/root";
+import "./index.css";
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+console.log(
+  '👋 This message is being logged by "renderer.js", included via webpack'
+);
+
+const root = createRoot(document.body);
+root.render(Root());
