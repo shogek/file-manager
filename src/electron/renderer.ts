@@ -26,10 +26,11 @@
  * ```
  */
 
-import "./index.css";
+// import "../reset.css";
+// import "../index.css";
 
 /**
  * React added via the following tutorial:
  * https://www.electronforge.io/guides/framework-integration/react-with-typescript
  */
-import "./app";
+import "../client";
