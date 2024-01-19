@@ -1,0 +1,19 @@
+.dirent-item {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 3rem 5fr 1fr 1fr;
+    cursor: pointer;
+    border: 2px solid transparent;
+
+    &:hover {
+        background-color: var(--color-background-lighter);
+    }
+
+    &._selected {
+        border-color: #8B8B8B;
+    }
+
+    &__icon {
+        fill: var(--color-text);
+    }
+}

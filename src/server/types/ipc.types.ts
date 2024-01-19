@@ -1,21 +1,21 @@
 import {
-  IpcCreateDirectoryArgs,
-  IpcCreateDirectoryResult,
-  IpcDeleteDirectoryArgs,
-  IpcDeleteDirectoryResult,
-  IpcReadDirectoryArgs,
-  IpcReadDirectoryResult,
+  IpcCreateFolderArgs,
+  IpcCreateFolderResult,
+  IpcDeleteDirentArgs,
+  IpcDeleteDirentResult,
+  IpcReadWorkingFolderArgs,
+  IpcReadWorkingFolderResult,
 } from "../../shared/types";
 
 export interface IIPcService {
   /** Create folder with given name at specified location */
-  createDirectory(
-    args: IpcCreateDirectoryArgs
-  ): Promise<IpcCreateDirectoryResult>;
+  createFolder(args: IpcCreateFolderArgs): Promise<IpcCreateFolderResult>;
 
   /** Returns the contents of a folder */
-  readDirectory(args: IpcReadDirectoryArgs): Promise<IpcReadDirectoryResult>;
+  readWorkingFolder(
+    args: IpcReadWorkingFolderArgs
+  ): Promise<IpcReadWorkingFolderResult>;
 
   /** Delete directory or file */
-  deleteDirent(args: IpcDeleteDirectoryArgs): Promise<IpcDeleteDirectoryResult>;
+  deleteDirent(args: IpcDeleteDirentArgs): Promise<IpcDeleteDirentResult>;
 }

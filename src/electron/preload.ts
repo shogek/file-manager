@@ -2,46 +2,42 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 const { contextBridge, ipcRenderer } = require("electron/renderer");
 import {
-  IpcCreateDirectoryArgs,
-  IpcCreateDirectoryResult,
-  IpcDeleteDirectoryArgs,
-  IpcDeleteDirectoryResult,
-  IpcReadDirectoryArgs,
-  IpcReadDirectoryResult,
+  IpcCreateFolderArgs,
+  IpcCreateFolderResult,
+  IpcDeleteDirentArgs,
+  IpcDeleteDirentResult,
+  IpcReadWorkingFolderArgs,
+  IpcReadWorkingFolderResult,
 } from "../shared/types";
 
 export interface IElectronAPI {
-  createDirectory: (
-    args: IpcCreateDirectoryArgs
-  ) => Promise<IpcCreateDirectoryResult>;
+  createFolder: (args: IpcCreateFolderArgs) => Promise<IpcCreateFolderResult>;
 
-  readDirectory: (
-    args: IpcReadDirectoryArgs
-  ) => Promise<IpcReadDirectoryResult>;
+  readWorkingFolder: (
+    args: IpcReadWorkingFolderArgs
+  ) => Promise<IpcReadWorkingFolderResult>;
 
-  deleteDirent: (
-    args: IpcDeleteDirectoryArgs
-  ) => Promise<IpcDeleteDirectoryResult>;
+  deleteDirent: (args: IpcDeleteDirentArgs) => Promise<IpcDeleteDirentResult>;
 }
 
 contextBridge.exposeInMainWorld("electronAPI", {
-  createDirectory: (args: IpcCreateDirectoryArgs): IpcCreateDirectoryResult =>
+  createFolder: (args: IpcCreateFolderArgs): IpcCreateFolderResult =>
     ipcRenderer.invoke(
-      "app-create-directory",
+      "app-create-folder",
       args
-    ) as unknown as IpcCreateDirectoryResult,
+    ) as unknown as IpcCreateFolderResult,
 
-  readDirectory: (args: IpcReadDirectoryArgs): IpcReadDirectoryResult =>
+  readWorkingFolder: (args: IpcDeleteDirentArgs): IpcReadWorkingFolderResult =>
     ipcRenderer.invoke(
-      "app-read-directory",
+      "app-read-working-folder",
       args
-    ) as unknown as IpcReadDirectoryResult,
+    ) as unknown as IpcReadWorkingFolderResult,
 
-  deleteDirent: (args: IpcDeleteDirectoryArgs): IpcDeleteDirectoryResult =>
+  deleteDirent: (args: IpcDeleteDirentArgs): IpcDeleteDirentResult =>
     ipcRenderer.invoke(
       "app-delete-dirent",
       args
-    ) as unknown as IpcDeleteDirectoryResult,
+    ) as unknown as IpcDeleteDirentResult,
 });
 
 declare global {

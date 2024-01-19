@@ -1,41 +1,26 @@
 import fs from "fs/promises";
-import { OsFile, OsFileWithMetadata } from "../../shared/types";
+import { Dirent } from "node:original-fs";
+import { OsMetadata } from "../../shared/types";
 import { IFileSystemService } from "../types/file-system.types";
 
 class FileSystemService implements IFileSystemService {
-  createDirectory(path: string): Promise<void> {
+  createFolder(path: string): Promise<void> {
     return fs.mkdir(path);
   }
 
-  async readDirectory(path: string): Promise<OsFileWithMetadata[]> {
-    const rawFiles = await fs.readdir(path, {
-      withFileTypes: true,
-    });
+  readFolder(path: string): Promise<Dirent[]> {
+    return fs.readdir(path, { withFileTypes: true });
+  }
 
-    const osFiles = rawFiles.map(
-      (rawFile): OsFile => ({
-        name: rawFile.name,
-        path: rawFile.path,
-        isDirectory: rawFile.isDirectory(),
-      })
-    );
+  async readMetadata(path: string): Promise<OsMetadata> {
+    const stats = await fs.stat(path);
 
-    const metadataPromises = osFiles.map(
-      async (osFile): Promise<OsFileWithMetadata> => {
-        const metadata = await fs.stat(osFile.path + "/" + osFile.name);
-
-        return {
-          ...osFile,
-          metadata: {
-            dateCreated: metadata.birthtime.toISOString(),
-            dateAccessed: metadata.atime.toISOString(),
-            dateModified: metadata.mtime.toISOString(),
-          },
-        };
-      }
-    );
-
-    return Promise.all(metadataPromises);
+    return {
+      dateCreated: stats.birthtime.toISOString(),
+      dateAccessed: stats.atime.toISOString(),
+      dateModified: stats.mtime.toISOString(),
+      sizeInBytes: stats.size,
+    };
   }
 
   deleteDirent(path: string): Promise<void> {
@@ -43,4 +28,4 @@ class FileSystemService implements IFileSystemService {
   }
 }
 
-export const fileSystemService = new FileSystemService();
+export const fileSystemService: IFileSystemService = new FileSystemService();

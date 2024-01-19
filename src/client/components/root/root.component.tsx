@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import cn from "classnames";
+import { useEffect, useRef, useState } from "react";
 import {
-  IpcCreateDirectoryResult,
-  IpcReadDirectoryResult,
-  OsFileWithMetadata,
+  IpcCreateFolderResult,
+  IpcReadWorkingFolderResult,
+  OsDirent,
 } from "../../../shared/types";
+import { isOsFolder } from "../../../shared/type.helpers";
 import { useEffectOnce } from "../../general/hooks/useEffectOnce";
-import { IconDirectory } from "../icons/icon-directory.component";
-import { IconFile } from "../icons/icon-file.component";
+import { DirentList } from "../dirent-list/dirent-list.component";
+import { useCurrentFolderStore } from "../../general/stores/current-directory.store";
 import "../../general/styles/reset.css";
 import "./root.scss";
 
@@ -18,149 +18,128 @@ type ContextMenu = {
 };
 
 export function Root() {
-  const [files, setFiles] = useState<OsFileWithMetadata[]>([]);
-  const [selectedFile, setSelectedFile] = useState<OsFileWithMetadata | null>(
-    null
-  );
+  const currentFolder = useCurrentFolderStore((x) => x.currentFolder);
+  const setCurrentFolder = useCurrentFolderStore((x) => x.setCurrentFolder);
+
   const contextMenuRef = useRef<HTMLUListElement | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenu | null>(null);
 
-  const handleMouseDown = (e: MouseEvent) => {
-    // TODO: This works, but after the context menu closes, the event listener is still active and firing events
-    console.log(" ");
-    console.log("handleMouseDown | e", e);
-    console.log("handleMouseDown | contextMenu", contextMenu);
-    console.log("handleMouseDown | contextMenuRef", contextMenuRef);
-    console.log("handleMouseDown | e.target", e.target);
-    if (!contextMenu || !contextMenuRef.current) {
-      return;
-    }
+  // const handleMouseDown = (e: MouseEvent) => {
+  //   // TODO: This works, but after the context menu closes, the event listener is still active and firing events
+  //   console.log(" ");
+  //   console.log("handleMouseDown | e", e);
+  //   console.log("handleMouseDown | contextMenu", contextMenu);
+  //   console.log("handleMouseDown | contextMenuRef", contextMenuRef);
+  //   console.log("handleMouseDown | e.target", e.target);
+  //   if (!contextMenu || !contextMenuRef.current) {
+  //     return;
+  //   }
 
-    if (!contextMenuRef.current.contains(e.target as Node)) {
-      setContextMenu(null);
-    }
-  };
+  //   if (!contextMenuRef.current.contains(e.target as Node)) {
+  //     setContextMenu(null);
+  //   }
+  // };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleMouseDown);
+  // useEffect(() => {
+  //   document.addEventListener("mousedown", handleMouseDown);
 
-    return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [contextMenu]);
+  //   return () => document.removeEventListener("mousedown", handleMouseDown);
+  // }, [contextMenu]);
 
-  const onDirectoryRead = (result: IpcReadDirectoryResult) => {
+  const onDirectoryRead = (result: IpcReadWorkingFolderResult) => {
     if (!result.isSuccess) {
       alert(result.error);
       return;
     }
 
-    setFiles(result.data);
+    setCurrentFolder(result.data);
   };
 
   const handleClickCreateFolder = () => {
-    const anyFile = files[0];
-    if (!anyFile) {
+    if (!currentFolder) {
       return;
     }
 
-    const currentPath = anyFile.path;
+    const currentPath = `${currentFolder.path}/${currentFolder.name}`;
     window.electronAPI
-      .createDirectory({ path: currentPath, name: "my-new-folder-2" })
-      .then((result: IpcCreateDirectoryResult) => {
+      .createFolder({ path: currentPath, name: "my-new-folder-2" })
+      .then((result: IpcCreateFolderResult) => {
         if (!result.isSuccess) {
           alert(result.error);
           return;
         }
 
         window.electronAPI
-          .readDirectory({ path: currentPath })
+          .readWorkingFolder({ path: currentPath })
           .then(onDirectoryRead);
       });
   };
 
-  const onDoubleClick = (file: OsFileWithMetadata) => {
-    if (!file.isDirectory) {
+  const handleDoubleClick = (dirent: OsDirent) => {
+    if (!isOsFolder(dirent)) {
+      // TODO: Open the file
       return;
     }
 
-    const newPath = `${file.path}/${file.name}`;
-    window.electronAPI.readDirectory({ path: newPath }).then(onDirectoryRead);
-  };
-
-  const handleClickBack = () => {
-    let parentFolder = "";
-
-    const anyFile = files[0];
-    if (anyFile) {
-      // Folder we entered could be empty
-      parentFolder = anyFile.path.split("/").slice(0, -1).join("/");
-    }
-
-    if (selectedFile) {
-      parentFolder = selectedFile.path;
-    }
-
-    if (!parentFolder) {
-      return;
-    }
-
+    const newPath = `${dirent.path}/${dirent.name}`;
     window.electronAPI
-      .readDirectory({ path: parentFolder })
+      .readWorkingFolder({ path: newPath })
       .then(onDirectoryRead);
   };
 
-  const handleClick = (fileClicked: OsFileWithMetadata) => {
-    if (fileClicked.name === selectedFile?.name) {
-      setSelectedFile(fileClicked);
-      onDoubleClick(fileClicked);
-      return;
-    }
-
-    setSelectedFile(fileClicked);
-  };
-
-  const handleContextMenuItemClick = (option: string) => {
-    setContextMenu(null);
-
-    if (!selectedFile) {
-      return;
-    }
-
-    if (option !== "Delete") {
+  const handleClickBack = () => {
+    if (!currentFolder) {
       return;
     }
 
     window.electronAPI
-      .deleteDirent({ path: `${selectedFile.path}/${selectedFile.name}` })
-      .then((result) => {
-        if (!result.isSuccess) {
-          console.log(result.error);
-          return;
-        }
-
-        setSelectedFile(null);
-
-        window.electronAPI
-          .readDirectory({ path: selectedFile.path })
-          .then(onDirectoryRead);
-      });
+      .readWorkingFolder({ path: currentFolder.path })
+      .then(onDirectoryRead);
   };
 
-  const handleContextMenuClick = (
-    e: React.MouseEvent,
-    fileClicked: OsFileWithMetadata
-  ) => {
-    setSelectedFile(fileClicked);
-    const xCoord = e.pageX;
-    const yCoord = e.pageY;
-    setContextMenu({
-      xCoord,
-      yCoord,
-      options: ["Rename", "Delete"],
-    });
-  };
+  // const handleContextMenuItemClick = (option: string) => {
+  //   setContextMenu(null);
+
+  //   if (!selectedFile) {
+  //     return;
+  //   }
+
+  //   if (option !== "Delete") {
+  //     return;
+  //   }
+
+  //   window.electronAPI
+  //     .deleteDirent({ path: `${selectedFile.path}/${selectedFile.name}` })
+  //     .then((result) => {
+  //       if (!result.isSuccess) {
+  //         console.log(result.error);
+  //         return;
+  //       }
+
+  //       setSelectedFile(null);
+
+  //       window.electronAPI
+  //         .readDirectory({ path: selectedFile.path })
+  //         .then(onDirectoryRead);
+  //     });
+  // };
+
+  // const handleContextMenuClick = (
+  //   e: React.MouseEvent,
+  //   fileClicked: OsFileWithMetadata
+  // ) => {
+  //   setSelectedFile(fileClicked);
+  //   const xCoord = e.pageX;
+  //   const yCoord = e.pageY;
+  //   setContextMenu({
+  //     xCoord,
+  //     yCoord,
+  //     options: ["Rename", "Delete"],
+  //   });
+  // };
 
   useEffectOnce(() => {
-    window.electronAPI.readDirectory({ path: null }).then(onDirectoryRead);
+    window.electronAPI.readWorkingFolder({ path: null }).then(onDirectoryRead);
   });
 
   return (
@@ -173,32 +152,9 @@ export function Root() {
         Create new folder
       </button>
 
-      <ul className="root__file-list">
-        {files.map((file) => (
-          <li
-            key={file.name}
-            className={cn("root__file-list-item", {
-              ["_selected"]: file.name === selectedFile?.name,
-            })}
-            onClick={() => handleClick(file)}
-            onContextMenu={(e) => handleContextMenuClick(e, file)}
-          >
-            <p>
-              {file.isDirectory ? (
-                <IconDirectory width={10} height={10} />
-              ) : (
-                <IconFile width={10} height={15} />
-              )}
-            </p>
-            <p>
-              {file.name} | {file.metadata.dateModified} |{" "}
-              {file.metadata.dateCreated}
-            </p>
-          </li>
-        ))}
-      </ul>
+      <DirentList onEntryDoubleClick={handleDoubleClick} />
 
-      {contextMenu && (
+      {/* {contextMenu && (
         <ul
           ref={contextMenuRef}
           className="root__context-menu"
@@ -214,7 +170,7 @@ export function Root() {
             </li>
           ))}
         </ul>
-      )}
+      )} */}
     </div>
   );
 }
