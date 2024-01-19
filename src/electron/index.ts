@@ -3,6 +3,7 @@ import { ipcService } from "../server/services/ipc.service";
 import {
   IpcCreateFolderArgs,
   IpcDeleteDirentArgs,
+  IpcOpenFileArgs,
   IpcReadWorkingFolderArgs,
 } from "../shared/types";
 
@@ -49,6 +50,10 @@ app.on("ready", () => {
 
   ipcMain.handle("app-delete-dirent", (_, args: IpcDeleteDirentArgs) =>
     ipcService.deleteDirent(args)
+  );
+
+  ipcMain.handle("app-open-file", (_, args: IpcOpenFileArgs) =>
+    ipcService.openFile(args)
   );
 
   createWindow();

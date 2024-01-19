@@ -32,6 +32,12 @@ export type IpcReadWorkingFolderArgs = {
 };
 export type IpcReadWorkingFolderResult = Result<WorkingFolder>;
 
+export type IpcOpenFileArgs = {
+  /** Example: `"C:\Users\john.doe/Downloads/test.png"` */
+  path: string;
+};
+export type IpcOpenFileResult = Result<null>;
+
 export type OsDirentMetadata = {
   /** Example: `2024-01-16T09:46:45.697Z` */
   dateCreated: string;

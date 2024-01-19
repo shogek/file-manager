@@ -3,6 +3,8 @@ import {
   IpcCreateFolderResult,
   IpcDeleteDirentArgs,
   IpcDeleteDirentResult,
+  IpcOpenFileArgs,
+  IpcOpenFileResult,
   IpcReadWorkingFolderArgs,
   IpcReadWorkingFolderResult,
 } from "../../shared/types";
@@ -18,4 +20,6 @@ export interface IIPcService {
 
   /** Delete directory or file */
   deleteDirent(args: IpcDeleteDirentArgs): Promise<IpcDeleteDirentResult>;
+
+  openFile(args: IpcOpenFileArgs): Promise<IpcOpenFileResult>;
 }

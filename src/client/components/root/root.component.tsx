@@ -76,14 +76,20 @@ export function Root() {
   };
 
   const handleDoubleClick = (dirent: OsDirent) => {
+    const fullPath = `${dirent.path}/${dirent.name}`;
+
     if (!isOsFolder(dirent)) {
-      // TODO: Open the file
+      window.electronAPI.openFile({ path: fullPath }).then((result) => {
+        if (!result.isSuccess) {
+          alert(result.error);
+          return;
+        }
+      });
       return;
     }
 
-    const newPath = `${dirent.path}/${dirent.name}`;
     window.electronAPI
-      .readWorkingFolder({ path: newPath })
+      .readWorkingFolder({ path: fullPath })
       .then(onDirectoryRead);
   };
 

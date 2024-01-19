@@ -3,6 +3,8 @@ import {
   IpcCreateFolderResult,
   IpcDeleteDirentArgs,
   IpcDeleteDirentResult,
+  IpcOpenFileArgs,
+  IpcOpenFileResult,
   IpcReadWorkingFolderArgs,
   IpcReadWorkingFolderResult,
   OsFile,
@@ -56,6 +58,22 @@ class IpcService implements IIPcService {
   }: IpcDeleteDirentArgs): Promise<IpcDeleteDirentResult> {
     try {
       await fileSystemService.deleteDirent(path);
+
+      return {
+        isSuccess: true,
+        data: null,
+      };
+    } catch (e: unknown) {
+      return {
+        isSuccess: false,
+        error: JSON.stringify(e),
+      };
+    }
+  }
+
+  async openFile({ path }: IpcOpenFileArgs): Promise<IpcOpenFileResult> {
+    try {
+      await fileSystemService.openFile(path);
 
       return {
         isSuccess: true,

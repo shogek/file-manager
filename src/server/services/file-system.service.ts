@@ -1,4 +1,6 @@
 import fs from "fs/promises";
+import { shell } from "electron";
+import { execFile } from "node:child_process";
 import { Dirent } from "node:original-fs";
 import { OsMetadata } from "../../shared/types";
 import { IFileSystemService } from "../types/file-system.types";
@@ -25,6 +27,17 @@ class FileSystemService implements IFileSystemService {
 
   deleteDirent(path: string): Promise<void> {
     return fs.rm(path, { recursive: true });
+  }
+
+  async openFile(path: string): Promise<any> {
+    const error = await shell.openPath(path);
+
+    if (error) {
+      const title = `An error ocurred while opening (${path})!`;
+      throw { title, reason: error };
+    }
+
+    return;
   }
 }
 

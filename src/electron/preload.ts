@@ -6,6 +6,8 @@ import {
   IpcCreateFolderResult,
   IpcDeleteDirentArgs,
   IpcDeleteDirentResult,
+  IpcOpenFileArgs,
+  IpcOpenFileResult,
   IpcReadWorkingFolderArgs,
   IpcReadWorkingFolderResult,
 } from "../shared/types";
@@ -18,6 +20,8 @@ export interface IElectronAPI {
   ) => Promise<IpcReadWorkingFolderResult>;
 
   deleteDirent: (args: IpcDeleteDirentArgs) => Promise<IpcDeleteDirentResult>;
+
+  openFile: (args: IpcOpenFileArgs) => Promise<IpcOpenFileResult>;
 }
 
 contextBridge.exposeInMainWorld("electronAPI", {
@@ -38,6 +42,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
       "app-delete-dirent",
       args
     ) as unknown as IpcDeleteDirentResult,
+
+  openFile: (args: IpcOpenFileArgs): IpcDeleteDirentResult =>
+    ipcRenderer.invoke("app-open-file", args) as unknown as IpcOpenFileResult,
 });
 
 declare global {
