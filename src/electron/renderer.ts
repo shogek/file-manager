@@ -33,4 +33,4 @@
  * React added via the following tutorial:
  * https://www.electronforge.io/guides/framework-integration/react-with-typescript
  */
-import "../client";
+import '../client'

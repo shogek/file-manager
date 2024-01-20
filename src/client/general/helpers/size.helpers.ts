@@ -4,13 +4,13 @@
  * `(11) => "1.12 B"`
  */
 export function getHumanReadableSize(bytes: number): string {
-  if (bytes >= 100_000) {
-    return `${(bytes / 1_000_000).toFixed(2)} MB`;
-  }
+   if (bytes >= 100_000) {
+      return `${(bytes / 1_000_000).toFixed(2)} MB`
+   }
 
-  if (bytes >= 100) {
-    return `${(bytes / 1_000).toFixed(2)} KB`;
-  }
+   if (bytes >= 100) {
+      return `${(bytes / 1_000).toFixed(2)} KB`
+   }
 
-  return `${bytes} B`;
+   return `${bytes} B`
 }

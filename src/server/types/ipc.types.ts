@@ -1,25 +1,23 @@
 import {
-  IpcCreateFolderArgs,
-  IpcCreateFolderResult,
-  IpcDeleteDirentArgs,
-  IpcDeleteDirentResult,
-  IpcOpenFileArgs,
-  IpcOpenFileResult,
-  IpcReadWorkingFolderArgs,
-  IpcReadWorkingFolderResult,
-} from "../../shared/types";
+   IpcCreateFolderArgs,
+   IpcCreateFolderResult,
+   IpcDeleteDirentArgs,
+   IpcDeleteDirentResult,
+   IpcOpenFileArgs,
+   IpcOpenFileResult,
+   IpcReadWorkingFolderArgs,
+   IpcReadWorkingFolderResult,
+} from '../../shared/types'
 
 export interface IIPcService {
-  /** Create folder with given name at specified location */
-  createFolder(args: IpcCreateFolderArgs): Promise<IpcCreateFolderResult>;
+   /** Create folder with given name at specified location */
+   createFolder(args: IpcCreateFolderArgs): Promise<IpcCreateFolderResult>
 
-  /** Returns the contents of a folder */
-  readWorkingFolder(
-    args: IpcReadWorkingFolderArgs
-  ): Promise<IpcReadWorkingFolderResult>;
+   /** Returns the contents of a folder */
+   readWorkingFolder(args: IpcReadWorkingFolderArgs): Promise<IpcReadWorkingFolderResult>
 
-  /** Delete directory or file */
-  deleteDirent(args: IpcDeleteDirentArgs): Promise<IpcDeleteDirentResult>;
+   /** Delete directory or file */
+   deleteDirent(args: IpcDeleteDirentArgs): Promise<IpcDeleteDirentResult>
 
-  openFile(args: IpcOpenFileArgs): Promise<IpcOpenFileResult>;
+   openFile(args: IpcOpenFileArgs): Promise<IpcOpenFileResult>
 }
