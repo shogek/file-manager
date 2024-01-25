@@ -1,0 +1,33 @@
+.address-bar {
+   width: 100%;
+   display: flex;
+   align-items: center;
+
+   &__arrow {
+      padding: 1rem;
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+      fill: var(--color-text);
+
+      &:hover {
+         background-color: var(--color-background-lighter);
+      }
+
+      &--forward {
+         transform: rotate(-90deg);
+      }
+
+      &--backward {
+         transform: rotate(90deg);
+      }
+   }
+
+   &__input {
+      width: 100%;
+      margin-left: 1rem;
+      background-color: transparent;
+      border: none;
+      color: var(--color-text);
+   }
+}

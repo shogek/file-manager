@@ -1,0 +1,27 @@
+.context-menu {
+   position: absolute;
+   background-color: var(--color-background);
+   box-shadow:
+      rgba(0, 0, 0, 0.1) 6px 2px 16px 0px,
+      rgba(0, 0, 0, 0.1) -6px -2px 16px 0px;
+
+   &__item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+   }
+
+   &__item-button {
+      width: 100%;
+      padding: 1rem;
+      background-color: transparent;
+      color: var(--color-text);
+      border: none;
+      cursor: pointer;
+      text-align: start;
+
+      &:hover {
+         background-color: var(--color-background-lighter);
+      }
+   }
+}
