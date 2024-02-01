@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { OsDirent } from '../../../shared/types'
 import { DirentItem } from '../dirent-item/dirent-item.component'
-import { useCurrentFolderStore } from '../../general/stores/current-directory.store'
+import { useCurrentFolderStore } from '../../general/stores/current-folder.store'
 import { useContextMenu } from '../../general/hooks/useContextMenu'
 import { useElectronApi } from '../../general/hooks/useElectronApi'
 import { logService } from '../../general/services/log.service'

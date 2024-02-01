@@ -1,4 +1,3 @@
-import { shell } from 'electron'
 import fs from 'fs/promises'
 import { Dirent } from 'node:original-fs'
 import { OsMetadata } from '../../shared/types'
@@ -30,17 +29,6 @@ class FileSystemService implements IFileSystemService {
        * https://www.electronjs.org/docs/latest/api/shell#shelltrashitempath
        */
       return fs.rm(path, { recursive: true })
-   }
-
-   async openFile(path: string): Promise<any> {
-      const error = await shell.openPath(path)
-
-      if (error) {
-         const title = `An error ocurred while opening (${path})!`
-         throw { title, reason: error }
-      }
-
-      return
    }
 }
 

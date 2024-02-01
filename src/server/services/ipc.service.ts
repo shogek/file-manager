@@ -13,6 +13,7 @@ import {
 } from '../../shared/types'
 import { IIPcService } from '../types/ipc.types'
 import { fileSystemService } from './file-system.service'
+import { shellService } from './shell.service'
 
 class IpcService implements IIPcService {
    async readWorkingFolder({ path }: IpcReadWorkingFolderArgs): Promise<IpcReadWorkingFolderResult> {
@@ -66,7 +67,7 @@ class IpcService implements IIPcService {
 
    async openFile({ path }: IpcOpenFileArgs): Promise<IpcOpenFileResult> {
       try {
-         await fileSystemService.openFile(path)
+         await shellService.openFile(path)
 
          return {
             isSuccess: true,

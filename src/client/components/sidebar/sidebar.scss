@@ -1,0 +1,24 @@
+@import '../../general/styles/colors.scss';
+
+.sidebar {
+   display: flex;
+   flex-direction: column;
+
+   &__item {
+      padding: 1rem;
+      border-left: 2px solid transparent;
+      fill: $item-inactive-text;
+
+      &:hover {
+         background-color: $item-hovered-bg;
+         fill: $item-hovered-text;
+         cursor: pointer;
+      }
+
+      &--active {
+         background-color: lighten($bg-level-2, 5%);
+         fill: $item-active-text;
+         border-left-color: $clr-accent;
+      }
+   }
+}

@@ -13,7 +13,4 @@ export interface IFileSystemService {
 
    /** Example: `"C:\Users\john.doe/Downloads/test.png"` */
    deleteDirent(path: string): Promise<void>
-
-   /** Example: `"C:\Users\john.doe/Downloads/test.png"` */
-   openFile(path: string): Promise<any>
 }

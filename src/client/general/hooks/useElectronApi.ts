@@ -1,5 +1,5 @@
 import { logService } from '../services/log.service'
-import { useCurrentFolderStore } from '../stores/current-directory.store'
+import { useCurrentFolderStore } from '../stores/current-folder.store'
 
 type UseElectronApiData = {
    loadWorkingFolder: (path: string | null) => Promise<void>

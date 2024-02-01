@@ -1,6 +1,8 @@
+@import '../../general/styles/colors.scss';
+
 .context-menu {
    position: absolute;
-   background-color: var(--color-background);
+   background-color: $bg-level-3;
    box-shadow:
       rgba(0, 0, 0, 0.1) 6px 2px 16px 0px,
       rgba(0, 0, 0, 0.1) -6px -2px 16px 0px;
@@ -15,13 +17,14 @@
       width: 100%;
       padding: 1rem;
       background-color: transparent;
-      color: var(--color-text);
+      color: $item-inactive-text;
       border: none;
       cursor: pointer;
       text-align: start;
 
       &:hover {
-         background-color: var(--color-background-lighter);
+         color: $item-hovered-text;
+         background-color: $item-hovered-bg;
       }
    }
 }

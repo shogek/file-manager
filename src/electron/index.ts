@@ -23,11 +23,25 @@ const createWindow = (): void => {
       },
    })
 
+   mainWindow.removeMenu()
+
    // and load the index.html of the app.
    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
    // Open the DevTools.
-   // mainWindow.webContents.openDevTools();
+   mainWindow.webContents.openDevTools()
+}
+
+const createDirentPropertiesWindow = (): void => {
+   const window = new BrowserWindow({
+      height: 800,
+      width: 1400,
+      webPreferences: {
+         preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      },
+   })
+
+   window.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 }
 
 // This method will be called when Electron has finished
@@ -43,6 +57,7 @@ app.on('ready', () => {
    ipcMain.handle('app-open-file', (_, args: IpcOpenFileArgs) => ipcService.openFile(args))
 
    createWindow()
+   // createDirentPropertiesWindow()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

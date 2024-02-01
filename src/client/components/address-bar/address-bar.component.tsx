@@ -1,6 +1,6 @@
 import { logService } from '../../general/services/log.service'
 import { useElectronApi } from '../../general/hooks/useElectronApi'
-import { useCurrentFolderStore } from '../../general/stores/current-directory.store'
+import { useCurrentFolderStore } from '../../general/stores/current-folder.store'
 import { IconArrow } from '../icons/icon-arrow.component'
 import './address-bar.scss'
 

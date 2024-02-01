@@ -7,6 +7,7 @@ import { useElectronApi } from '../../general/hooks/useElectronApi'
 import { AddressBar } from '../address-bar/address-bar.component'
 import '../../general/styles/reset.css'
 import './root.scss'
+import { Sidebar } from '../sidebar/sidebar.component'
 
 export function Root() {
    const electronApi = useElectronApi()
@@ -28,9 +29,15 @@ export function Root() {
 
    return (
       <div className="root">
-         <AddressBar />
+         <aside className="root__aside">
+            <Sidebar />
+         </aside>
 
-         <DirentList onEntryDoubleClick={handleDoubleClick} />
+         <main className="root__main">
+            <AddressBar />
+
+            <DirentList onEntryDoubleClick={handleDoubleClick} />
+         </main>
 
          <ContextMenu />
       </div>

@@ -1,0 +1,22 @@
+$clr-primary: #bfc0c0;
+$clr-secondary: #7698d3;
+$clr-accent: #ef8354;
+$clr-text: #ecf1f0;
+$clr-background: #2d3142;
+
+// The higher the level, the closer to the screen, the intenser color
+$bg-level-0: $clr-background;
+$bg-level-1: lighten($clr-background, 2%);
+$bg-level-2: lighten($clr-background, 4%);
+$bg-level-3: lighten($clr-background, 6%);
+
+// General
+$border-radius: 4px;
+
+// Common components
+$item-inactive-text: darken($clr-text, 10%);
+
+$item-hovered-text: darken($clr-text, 5%);
+$item-hovered-bg: rgba(#fff, 5%);
+
+$item-active-text: $clr-text;
